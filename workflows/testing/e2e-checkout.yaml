@@ -1,0 +1,75 @@
+# Testing Workflow: E2E Checkout Flow
+# End-to-end test of an e-commerce checkout process
+# Compatible with all Bowser implementations
+
+name: e2e-checkout
+description: Test the complete e-commerce checkout flow
+defaults:
+  skill: playwright-bowser
+  mode: headless
+  vision: false
+
+variables:
+  BASE_URL: "http://localhost:3000"      # App base URL
+  PRODUCT_PATH: "/products/1"             # Product to test
+  TEST_EMAIL: "test@example.com"          # Checkout email
+  TEST_CARD: "4242424242424242"           # Test card number (Stripe test)
+
+workflow: |
+  1. Navigate to {BASE_URL}{PRODUCT_PATH}
+  2. Verify product page loads
+     - Product name visible
+     - Price displayed
+     - Add to cart button present
+  3. Click "Add to Cart"
+  4. Verify cart update
+     - Cart count increments
+     - Success message appears
+  5. Navigate to cart
+  6. Verify cart page
+     - Product in cart
+     - Price correct
+     - Quantity shown
+     - Checkout button present
+  7. Click "Proceed to Checkout"
+  8. Verify checkout form
+     - Email input present
+     - Shipping fields present
+     - Payment fields present
+  9. Fill checkout information
+     - Email: {TEST_EMAIL}
+     - Shipping address (test data)
+     - Payment: {TEST_CARD}
+  10. Submit order
+  11. Verify order confirmation
+      - Success message
+      - Order number generated
+      - Confirmation details shown
+  12. STOP before actual payment (if using real gateway)
+  13. Report:
+      - Each step PASS/FAIL
+      - Time per step
+      - Total checkout time
+      - Any errors or issues
+
+validation_points:
+  - "Product page loads < 3s"
+  - "Add to cart responds < 1s"
+  - "Cart persists across navigation"
+  - "Form validation works"
+  - "Order confirmation displays correctly"
+
+notes: |
+  For staging/production:
+  - Use test payment methods (Stripe test cards)
+  - Cancel orders after confirmation
+  - Clean up test data
+
+  For CI/CD:
+  - Run in headless mode
+  - Capture screenshots at each step
+  - Generate structured report
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

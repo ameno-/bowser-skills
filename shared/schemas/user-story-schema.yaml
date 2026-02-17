@@ -1,0 +1,116 @@
+# User Story Schema
+# Defines the structure for browser automation test stories
+# Used by QA agents and UI review orchestrators across all implementations
+
+$id: "https://bowser-skills.dev/schemas/user-story.yaml"
+$schema: "https://json-schema.org/draft/2020-12/schema"
+
+title: User Story
+description: |
+  A user story defines a browser automation workflow for testing or validation.
+  Stories are parsed by QA agents and executed step-by-step with screenshots.
+
+type: object
+required:
+  - stories
+
+properties:
+  stories:
+    type: array
+    description: Array of user stories to validate
+    items:
+      $ref: "#/$defs/story"
+    minItems: 1
+
+$defs:
+  story:
+    type: object
+    required:
+      - name
+      - url
+      - workflow
+    properties:
+      name:
+        type: string
+        description: |
+          Descriptive name of the user story.
+          Should be concise but descriptive.
+          Examples: "Homepage loads correctly", "User can log in"
+        minLength: 1
+        maxLength: 100
+
+      url:
+        type: string
+        description: |
+          The starting URL for the story.
+          Can be a full URL or relative path.
+          Examples: "https://example.com", "http://localhost:3000"
+        format: uri
+
+      workflow:
+        type: string
+        description: |
+          The step-by-step workflow to execute.
+          Can be written in various formats:
+          - Simple imperative sentences
+          - Given/When/Then (BDD style)
+          - Checklists
+          - Narrative with assertions
+
+          The QA agent will parse this into discrete steps.
+        minLength: 10
+
+      metadata:
+        type: object
+        description: Optional metadata for the story
+        properties:
+          priority:
+            type: string
+            enum: [low, medium, high, critical]
+            description: Story priority
+
+          tags:
+            type: array
+            items:
+              type: string
+            description: Tags for categorization
+
+          author:
+            type: string
+            description: Story author
+
+          created:
+            type: string
+            format: date
+            description: Creation date
+
+    additionalProperties: false
+
+examples:
+  - stories:
+      - name: "Homepage loads correctly"
+        url: "https://example.com"
+        workflow: |
+          Navigate to https://example.com
+          Verify the page loads successfully
+          Verify the page title contains "Example"
+          Verify at least one navigation link is visible
+        metadata:
+          priority: high
+          tags: [smoke, homepage]
+
+      - name: "User login flow"
+        url: "https://example.com/login"
+        workflow: |
+          Given I am on the login page
+          When I enter valid credentials (user@test.com / password123)
+          And I click the login button
+          Then I should be redirected to the dashboard
+          And I should see a welcome message
+        metadata:
+          priority: critical
+          tags: [auth, regression]
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

@@ -1,0 +1,19 @@
+# Bowser Skills for OpenClaw - Requirements
+# Adapted from https://github.com/disler/bowser
+
+# Core dependencies
+openclaw>=0.1.0
+pyyaml>=6.0
+
+# Optional but recommended
+python-dotenv>=1.0.0
+
+# Development dependencies (optional)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+mypy>=1.0.0
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

@@ -1,0 +1,71 @@
+# Testing Workflow: Login Flow Validation
+# A reusable workflow for testing user login
+# Compatible with all Bowser implementations
+
+name: login-flow
+description: Test the complete user login flow
+defaults:
+  skill: playwright-bowser
+  mode: headless
+  vision: false
+
+variables:
+  URL: "http://localhost:3000/login"  # Login page URL
+  EMAIL: "test@example.com"           # Test user email
+  PASSWORD: "password123"             # Test user password
+
+workflow: |
+  1. Navigate to {URL}
+  2. Verify the login page loads
+     - Look for form element
+     - Verify page title or heading
+  3. Verify email input field is present
+  4. Fill email field with: {EMAIL}
+  5. Verify password input field is present
+  6. Fill password field with: {PASSWORD}
+  7. Verify submit/login button is present
+  8. Click the submit button
+  9. Verify successful login
+     - Check for redirect to dashboard/welcome page
+     - Look for user identifier (name, email, avatar)
+     - Verify no error messages present
+  10. Verify session persistence
+      - Refresh the page
+      - Verify still logged in
+  11. Report:
+      - Login success/failure
+      - Time to login
+      - Any errors encountered
+
+examples:
+  - url: "http://localhost:3000/login"
+    email: "user@test.com"
+    password: "testpass"
+
+failure_cases:
+  - name: "Invalid credentials"
+    steps:
+      - Enter wrong password
+      - Submit
+      - Verify error message appears
+      - Verify still on login page
+
+  - name: "Empty fields"
+    steps:
+      - Submit without entering anything
+      - Verify validation errors
+      - Verify form not submitted
+
+notes: |
+  This workflow tests the "happy path" of login.
+  
+  For comprehensive testing, also test:
+  - Invalid credentials
+  - Empty fields
+  - Rate limiting
+  - Password reset flow
+  - Remember me functionality
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

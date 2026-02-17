@@ -1,0 +1,214 @@
+# Skill Schema
+# Defines the structure for browser automation skills
+# Used across Pi, Codex, OpenClaw, and CloudHub implementations
+
+$id: "https://bowser-skills.dev/schemas/skill.yaml"
+$schema: "https://json-schema.org/draft/2020-12/schema"
+
+title: Browser Automation Skill
+description: |
+  A skill defines browser automation capabilities.
+  Skills are the foundational layer of the Bowser four-layer architecture.
+
+type: object
+required:
+  - name
+  - description
+
+properties:
+  name:
+    type: string
+    description: |
+      Unique identifier for the skill.
+      Use kebab-case naming.
+      Examples: "playwright-bowser", "claude-bowser"
+    pattern: "^[a-z][a-z0-9-]*$"
+
+  description:
+    type: string
+    description: |
+      Human-readable description of the skill.
+      Should explain when and why to use this skill.
+    minLength: 10
+
+  keywords:
+    type: array
+    description: Keywords for skill discovery
+    items:
+      type: string
+    example: ["playwright", "headless", "browser", "test"]
+
+  type:
+    type: string
+    enum: [browser, automation, testing]
+    description: Skill category
+
+  implementation:
+    type: object
+    description: Implementation details
+    required:
+      - provider
+    properties:
+      provider:
+        type: string
+        enum: [playwright-cli, chrome-mcp, selenium, puppeteer]
+        description: Underlying browser automation provider
+
+      capabilities:
+        type: array
+        items:
+          type: string
+          enum:
+            - navigation
+            - clicking
+            - typing
+            - screenshots
+            - pdf
+            - console
+            - network
+            - mobile
+            - parallel
+            - headless
+            - headed
+            - persistent
+
+  configuration:
+    type: object
+    description: Skill configuration options
+    properties:
+      viewport:
+        type: object
+        properties:
+          width:
+            type: integer
+            default: 1440
+          height:
+            type: integer
+            default: 900
+
+      headless:
+        type: boolean
+        description: Run browser without visible window
+        default: true
+
+      persistent:
+        type: boolean
+        description: Persist cookies and storage between sessions
+        default: true
+
+      sessions:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+            description: Support named sessions for parallel execution
+            default: true
+          parallel:
+            type: boolean
+            description: Allow parallel session execution
+            default: true
+
+  workflow:
+    type: object
+    description: Standard workflow for using this skill
+    properties:
+      setup:
+        type: array
+        items:
+          type: string
+        description: Steps to set up the skill
+
+      execution:
+        type: array
+        items:
+          type: string
+        description: Standard execution steps
+
+      cleanup:
+        type: array
+        items:
+          type: string
+        description: Steps to clean up after execution
+
+  commands:
+    type: array
+    description: Available commands/actions
+    items:
+      type: object
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+              required:
+                type: boolean
+              default:
+                type: string
+
+examples:
+  - name: playwright-bowser
+    description: Headless browser automation using Playwright CLI
+    keywords: [playwright, headless, browser, test, screenshot, parallel]
+    type: automation
+    implementation:
+      provider: playwright-cli
+      capabilities:
+        - navigation
+        - clicking
+        - typing
+        - screenshots
+        - pdf
+        - console
+        - network
+        - parallel
+        - headless
+        - persistent
+    configuration:
+      viewport:
+        width: 1440
+        height: 900
+      headless: true
+      persistent: true
+      sessions:
+        enabled: true
+        parallel: true
+
+  - name: claude-bowser
+    description: Observable browser automation using Chrome MCP
+    keywords: [chrome, browser, screenshot, observable, mcp]
+    type: browser
+    implementation:
+      provider: chrome-mcp
+      capabilities:
+        - navigation
+        - clicking
+        - typing
+        - screenshots
+        - console
+        - network
+        - headed
+    configuration:
+      viewport:
+        width: 1440
+        height: 900
+      headless: false
+      persistent: true
+      sessions:
+        enabled: false
+        parallel: false
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

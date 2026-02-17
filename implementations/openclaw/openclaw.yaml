@@ -1,0 +1,80 @@
+# OpenClaw Configuration for Bowser Skills
+# Adapted from https://github.com/disler/bowser
+#
+# Place this file in your project root or ~/.openclaw/openclaw.yaml
+
+version: "1.0"
+
+# Plugin Configuration
+plugins:
+  - path: ./tools
+    name: bowser-tools
+    auto_load: true
+
+# Tool Configuration
+tools:
+  bowser:
+    # Default settings for all browser tools
+    defaults:
+      viewport: "1440x900"
+      headless: true
+      persistent: true
+    
+    # Screenshots directory
+    screenshots_dir: "./screenshots"
+    
+    # Timeouts (seconds)
+    timeouts:
+      navigation: 30
+      screenshot: 10
+      command: 60
+    
+    # Vision mode (return screenshots in context)
+    vision: false
+
+# Agent Configuration
+agents:
+  bowser-qa:
+    class: "agents.qa.BrowserQAAgent"
+    description: "QA validation agent for browser user stories"
+    config:
+      headed: false
+      vision: false
+      viewport: "1440x900"
+      screenshots_dir: "./screenshots/bowser-qa"
+
+  playwright-bowser:
+    class: "agents.qa.BrowserQAAgent"  # Same agent, different defaults
+    description: "General-purpose browser automation agent"
+    config:
+      headed: false
+      vision: false
+
+# Workflow Configuration
+workflows:
+  ui-review:
+    description: "Parallel user story validation across YAML files"
+    max_parallel: 10
+    default_agent: "bowser-qa"
+    stories_dir: "./shared/examples/sample-user-stories"
+  
+  amazon-add-to-cart:
+    description: "Search Amazon and add item to cart"
+    defaults:
+      skill: "playwright"
+      mode: "headless"
+  
+  blog-summarizer:
+    description: "Summarize latest blog post"
+    defaults:
+      skill: "playwright"
+      mode: "headless"
+
+# Logging
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

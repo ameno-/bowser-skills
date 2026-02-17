@@ -1,0 +1,48 @@
+# Hacker News User Stories
+# Sample user stories for testing against news.ycombinator.com
+# Compatible with all Bowser implementations (Pi, Codex, OpenClaw, CloudHub)
+
+stories:
+  - name: "Front page loads with posts"
+    url: "https://news.ycombinator.com/"
+    workflow: |
+      Navigate to https://news.ycombinator.com/
+      Verify the front page loads successfully
+      Verify at least 10 posts are visible, each with a title and a link
+      Verify the Hacker News logo/header is visible
+    metadata:
+      priority: high
+      tags: [smoke, homepage, hackernews]
+
+  - name: "Navigate to page two and back"
+    url: "https://news.ycombinator.com/"
+    workflow: |
+      Navigate to https://news.ycombinator.com/
+      Verify the front page loads with posts
+      Click the 'More' link at the bottom of the page
+      Verify page 2 loads with a new set of posts
+      Verify the URL contains 'p=2'
+      Click the browser back button
+      Verify page 1 loads again with the original posts
+    metadata:
+      priority: medium
+      tags: [navigation, pagination, hackernews]
+
+  - name: "View top post comments"
+    url: "https://news.ycombinator.com/"
+    workflow: |
+      Navigate to https://news.ycombinator.com/
+      Verify the front page loads with posts
+      Identify the top post (highest vote count)
+      Click the first post's comments link
+      Verify the comments page loads
+      Verify the post title is displayed
+      Verify at least one comment is visible
+      Verify the comment has an author and timestamp
+    metadata:
+      priority: medium
+      tags: [comments, content, hackernews]
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

@@ -1,0 +1,67 @@
+# Example App User Stories
+# Template stories for testing against a localhost application
+# Copy and modify for your own applications
+
+stories:
+  - name: "Homepage loads with navigation"
+    url: "http://localhost:3000"
+    workflow: |
+      Navigate to http://localhost:3000
+      Verify the page loads successfully
+      Verify the page title is not empty
+      Verify a navigation element is present
+      Verify at least one content section is visible
+    metadata:
+      priority: critical
+      tags: [smoke, homepage, local]
+
+  - name: "Login form validation"
+    url: "http://localhost:3000/login"
+    workflow: |
+      Navigate to http://localhost:3000/login
+      Verify the login page loads
+      Verify email input field is present
+      Verify password input field is present
+      Verify submit button is present
+      Click submit without entering credentials
+      Verify validation error message appears
+    metadata:
+      priority: high
+      tags: [auth, forms, validation, local]
+
+  - name: "Successful login flow"
+    url: "http://localhost:3000/login"
+    workflow: |
+      Navigate to http://localhost:3000/login
+      Fill email field with "test@example.com"
+      Fill password field with "password123"
+      Click the login button
+      Verify redirect to dashboard
+      Verify dashboard shows welcome message
+      Verify user menu or profile indicator is visible
+    metadata:
+      priority: critical
+      tags: [auth, e2e, local]
+
+  - name: "Dashboard widget visibility"
+    url: "http://localhost:3000/dashboard"
+    workflow: |
+      Navigate to http://localhost:3000 (assuming auto-redirect to login if not auth)
+      If on login page, login with test credentials
+      Navigate to http://localhost:3000/dashboard
+      Verify at least 3 widgets are visible
+      Verify each widget has a title
+      Verify widget content is not empty
+    metadata:
+      priority: medium
+      tags: [dashboard, widgets, local]
+
+# Template Variables:
+# Replace these with your actual values:
+# - localhost:3000 -> your app URL
+# - test@example.com / password123 -> your test credentials
+# - Widget count (3) -> your actual widget count
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

@@ -1,0 +1,59 @@
+# Research Workflow: Blog Summarizer
+# Summarizes the latest post from a blog
+# Compatible with all Bowser implementations
+
+name: blog-summarizer
+description: Visit a blog, summarize the latest post, rate it
+defaults:
+  skill: playwright-bowser  # Headless is fine for this
+  mode: headless
+  vision: false
+
+variables:
+  PROMPT: null  # Required: blog URL
+
+workflow: |
+  1. Navigate to: {PROMPT} (the blog URL)
+  2. Verify the blog loads successfully
+  3. Identify the latest blog post
+     - Usually the first/most prominent post
+     - Look for date indicators
+  4. Extract key information:
+     - Title
+     - Author (if available)
+     - Publication date
+     - Content/body text
+  5. Create a concise summary:
+     - 2-3 paragraphs
+     - Capture main points
+     - Preserve key insights
+  6. Give it a rating out of 10 with brief justification:
+     - Content quality
+     - Writing clarity
+     - Value/insight provided
+  7. Report:
+     - Blog URL
+     - Post title
+     - Author
+     - Date
+     - Summary
+     - Rating (X/10)
+
+examples:
+  - prompt: "https://simonwillison.net/"
+  - prompt: "https://news.ycombinator.com/"
+  - prompt: "https://blog.mozilla.org/"
+
+notes: |
+  This workflow uses playwright-bowser because:
+  1. No authentication required for public blogs
+  2. Headless mode is faster
+  3. Can run in CI/background
+  
+  For blogs behind authentication:
+  - Switch to claude-bowser
+  - Or handle login flow in workflow
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)

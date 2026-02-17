@@ -1,0 +1,55 @@
+# E-commerce Workflow: Amazon Add to Cart
+# A reusable workflow for adding items to an Amazon cart
+# Compatible with all Bowser implementations
+
+name: amazon-add-to-cart
+description: Search Amazon, add item(s) to cart, proceed to checkout
+defaults:
+  skill: claude-bowser  # Uses real Chrome for Amazon auth
+  mode: headed          # Visible browser for verification
+  vision: false
+
+variables:
+  PROMPT: null  # Required: item(s) to search for
+
+workflow: |
+  1. Navigate to https://www.amazon.com
+  2. Verify the homepage loads (look for search bar)
+  3. Search for: {PROMPT}
+  4. Verify search results appear
+  5. Click into the first relevant result
+  6. Verify the product detail page loads with:
+     - Product title
+     - Price
+     - "Add to Cart" button
+  7. Click "Add to Cart"
+  8. Verify cart confirmation appears
+     - Look for "Added to Cart" message
+     - Or cart count increment
+  9. Click "Proceed to checkout" or navigate to cart
+  10. Verify checkout page loads with item visible
+  11. STOP — Do not submit the order
+  12. Report:
+      - Item name
+      - Price
+      - Confirmation that checkout was reached
+
+examples:
+  - prompt: "mechanical keyboard"
+  - prompt: "wireless earbuds"
+  - prompt: "USB-C docking station"
+
+notes: |
+  This workflow uses claude-bowser by default because:
+  1. Amazon requires authentication for checkout
+  2. Most users are already logged into Amazon in Chrome
+  3. Observable mode lets you verify before proceeding
+
+  To use playwright-bowser instead:
+  - Set skill: playwright-bowser
+  - Set mode: headless (if running in CI)
+  - You'll need to handle authentication separately
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)
