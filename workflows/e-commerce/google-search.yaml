@@ -1,0 +1,52 @@
+# E-commerce Workflow: Google Search
+# Searches for products on Google
+# Compatible with all Bowser implementations
+
+name: google-search
+description: Navigate to Google and search for a product
+defaults:
+  skill: playwright-bowser  # Headless is fine for this
+  mode: headless
+  vision: false
+
+variables:
+  PROMPT: null  # Required: search term
+
+workflow: |
+  1. Navigate to https://www.google.com
+  2. Verify the Google homepage loads
+     - Look for Google logo
+     - Verify search bar is present
+  3. Click on the search input field
+  4. Type: {PROMPT}
+  5. Press Enter to submit search
+  6. Verify search results page loads
+     - Look for "{PROMPT}" in page title or results
+     - Verify at least one search result is visible
+  7. Take screenshot of results
+  8. Report:
+     - Search term used
+     - Number of results visible (if available)
+     - First result title (if available)
+     - Screenshot path
+
+examples:
+  - prompt: "nike shoes"
+  - prompt: "running shoes"
+  - prompt: "wireless headphones"
+
+notes: |
+  This workflow uses playwright-bowser because:
+  1. No authentication required for Google search
+  2. Headless mode is faster and more reliable
+  3. Can run in CI/background
+
+  For headless mode, use:
+  - playwright-bowser with headless=true
+
+  For visible browser (to watch the search):
+  - Add --headed flag or use claude-bowser
+
+# Original implementation reference:
+# Repository: https://github.com/disler/bowser
+# Author: IndyDevDan (@disler)
